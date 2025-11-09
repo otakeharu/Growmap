@@ -10,6 +10,8 @@ import SwiftUI
 struct ActionInputView: View {
     @StateObject private var viewModel: ActionInputViewModel
     @State private var navigateToGanttChart = false
+    @State private var showAlert = false
+    @State private var isCreatingPlan = false
 
     init(viewModel: ActionInputViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -87,7 +89,7 @@ struct ActionInputView: View {
 
                     Button(action: {
                         viewModel.saveAllActions()
-                        navigateToGanttChart = true
+                        showAlert = true
                     }) {
                         Text("完了")
                             .font(.headline)
@@ -105,5 +107,38 @@ struct ActionInputView: View {
         .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("行動入力")
         .navigationBarTitleDisplayMode(.inline)
+        .alert("計画表を作成", isPresented: $showAlert) {
+            Button("キャンセル", role: .cancel) { }
+            Button("作成する") {
+                isCreatingPlan = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    navigateToGanttChart = true
+                    isCreatingPlan = false
+                }
+            }
+        } message: {
+            Text("入力した内容で計画表を作成します")
+        }
+        .overlay {
+            if isCreatingPlan {
+                ZStack {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+
+                    VStack(spacing: 20) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .scaleEffect(1.5)
+
+                        Text("計画表を作成中...")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                    }
+                    .padding(40)
+                    .background(Color.primaryBrown.opacity(0.95))
+                    .cornerRadius(20)
+                }
+            }
+        }
     }
 }
