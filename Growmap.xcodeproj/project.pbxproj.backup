@@ -18,18 +18,18 @@
 		4901FE122EADF3910004486F /* GoalUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDEE2EADF3910004486F /* GoalUseCase.swift */; };
 		4901FE132EADF3910004486F /* CustomColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF12EADF3910004486F /* CustomColors.swift */; };
 		4901FE142EADF3910004486F /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF22EADF3910004486F /* DateExtensions.swift */; };
-		4901FE152EADF3910004486F /* View4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF42EADF3910004486F /* View4.swift */; };
-		4901FE162EADF3910004486F /* View4ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF52EADF3910004486F /* View4ViewModel.swift */; };
-		4901FE172EADF3910004486F /* View6.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF72EADF3910004486F /* View6.swift */; };
-		4901FE182EADF3910004486F /* View6ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF82EADF3910004486F /* View6ViewModel.swift */; };
-		4901FE192EADF3910004486F /* View3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDFA2EADF3910004486F /* View3.swift */; };
-		4901FE1A2EADF3910004486F /* View3ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDFB2EADF3910004486F /* View3ViewModel.swift */; };
-		4901FE1B2EADF3910004486F /* View5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDFD2EADF3910004486F /* View5.swift */; };
-		4901FE1C2EADF3910004486F /* View5ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDFE2EADF3910004486F /* View5ViewModel.swift */; };
-		4901FE1D2EADF3910004486F /* View1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE002EADF3910004486F /* View1.swift */; };
-		4901FE1E2EADF3910004486F /* View1ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE012EADF3910004486F /* View1ViewModel.swift */; };
-		4901FE1F2EADF3910004486F /* View2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE032EADF3910004486F /* View2.swift */; };
-		4901FE202EADF3910004486F /* View2ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE042EADF3910004486F /* View2ViewModel.swift */; };
+		4901FE152EADF3910004486F /* ActionInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF42EADF3910004486F /* ActionInputView.swift */; };
+		4901FE162EADF3910004486F /* ActionInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF52EADF3910004486F /* ActionInputViewModel.swift */; };
+		4901FE172EADF3910004486F /* CalendarEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF72EADF3910004486F /* CalendarEditView.swift */; };
+		4901FE182EADF3910004486F /* CalendarEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDF82EADF3910004486F /* CalendarEditViewModel.swift */; };
+		4901FE192EADF3910004486F /* ElementInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDFA2EADF3910004486F /* ElementInputView.swift */; };
+		4901FE1A2EADF3910004486F /* ElementInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDFB2EADF3910004486F /* ElementInputViewModel.swift */; };
+		4901FE1B2EADF3910004486F /* GanttChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDFD2EADF3910004486F /* GanttChartView.swift */; };
+		4901FE1C2EADF3910004486F /* GanttChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FDFE2EADF3910004486F /* GanttChartViewModel.swift */; };
+		4901FE1D2EADF3910004486F /* GoalInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE002EADF3910004486F /* GoalInputView.swift */; };
+		4901FE1E2EADF3910004486F /* GoalInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE012EADF3910004486F /* GoalInputViewModel.swift */; };
+		4901FE1F2EADF3910004486F /* PeriodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE032EADF3910004486F /* PeriodSelectionView.swift */; };
+		4901FE202EADF3910004486F /* PeriodSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE042EADF3910004486F /* PeriodSelectionViewModel.swift */; };
 		4901FE212EADF3910004486F /* UserDefaultsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE082EADF3910004486F /* UserDefaultsDataSource.swift */; };
 		4901FE222EADF3910004486F /* GoalRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4901FE0A2EADF3910004486F /* GoalRepository.swift */; };
 		4901FE242EADF3A40004486F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4901FE232EADF3A40004486F /* Assets.xcassets */; };
@@ -48,18 +48,18 @@
 		4901FDEE2EADF3910004486F /* GoalUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoalUseCase.swift; sourceTree = "<group>"; };
 		4901FDF12EADF3910004486F /* CustomColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomColors.swift; sourceTree = "<group>"; };
 		4901FDF22EADF3910004486F /* DateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
-		4901FDF42EADF3910004486F /* View4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View4.swift; sourceTree = "<group>"; };
-		4901FDF52EADF3910004486F /* View4ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View4ViewModel.swift; sourceTree = "<group>"; };
-		4901FDF72EADF3910004486F /* View6.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View6.swift; sourceTree = "<group>"; };
-		4901FDF82EADF3910004486F /* View6ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View6ViewModel.swift; sourceTree = "<group>"; };
-		4901FDFA2EADF3910004486F /* View3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View3.swift; sourceTree = "<group>"; };
-		4901FDFB2EADF3910004486F /* View3ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View3ViewModel.swift; sourceTree = "<group>"; };
-		4901FDFD2EADF3910004486F /* View5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View5.swift; sourceTree = "<group>"; };
-		4901FDFE2EADF3910004486F /* View5ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View5ViewModel.swift; sourceTree = "<group>"; };
-		4901FE002EADF3910004486F /* View1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View1.swift; sourceTree = "<group>"; };
-		4901FE012EADF3910004486F /* View1ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View1ViewModel.swift; sourceTree = "<group>"; };
-		4901FE032EADF3910004486F /* View2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View2.swift; sourceTree = "<group>"; };
-		4901FE042EADF3910004486F /* View2ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View2ViewModel.swift; sourceTree = "<group>"; };
+		4901FDF42EADF3910004486F /* ActionInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionInputView.swift; sourceTree = "<group>"; };
+		4901FDF52EADF3910004486F /* ActionInputViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionInputViewModel.swift; sourceTree = "<group>"; };
+		4901FDF72EADF3910004486F /* CalendarEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarEditView.swift; sourceTree = "<group>"; };
+		4901FDF82EADF3910004486F /* CalendarEditViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarEditViewModel.swift; sourceTree = "<group>"; };
+		4901FDFA2EADF3910004486F /* ElementInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElementInputView.swift; sourceTree = "<group>"; };
+		4901FDFB2EADF3910004486F /* ElementInputViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElementInputViewModel.swift; sourceTree = "<group>"; };
+		4901FDFD2EADF3910004486F /* GanttChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GanttChartView.swift; sourceTree = "<group>"; };
+		4901FDFE2EADF3910004486F /* GanttChartViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GanttChartViewModel.swift; sourceTree = "<group>"; };
+		4901FE002EADF3910004486F /* GoalInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoalInputView.swift; sourceTree = "<group>"; };
+		4901FE012EADF3910004486F /* GoalInputViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoalInputViewModel.swift; sourceTree = "<group>"; };
+		4901FE032EADF3910004486F /* PeriodSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodSelectionView.swift; sourceTree = "<group>"; };
+		4901FE042EADF3910004486F /* PeriodSelectionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodSelectionViewModel.swift; sourceTree = "<group>"; };
 		4901FE082EADF3910004486F /* UserDefaultsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsDataSource.swift; sourceTree = "<group>"; };
 		4901FE0A2EADF3910004486F /* GoalRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoalRepository.swift; sourceTree = "<group>"; };
 		4901FE232EADF3A40004486F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -160,69 +160,69 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		4901FDF62EADF3910004486F /* View4 */ = {
+		4901FDF62EADF3910004486F /* ActionInput */ = {
 			isa = PBXGroup;
 			children = (
-				4901FDF42EADF3910004486F /* View4.swift */,
-				4901FDF52EADF3910004486F /* View4ViewModel.swift */,
+				4901FDF42EADF3910004486F /* ActionInputView.swift */,
+				4901FDF52EADF3910004486F /* ActionInputViewModel.swift */,
 			);
-			path = View4;
+			path = ActionInput;
 			sourceTree = "<group>";
 		};
-		4901FDF92EADF3910004486F /* View6 */ = {
+		4901FDF92EADF3910004486F /* CalendarEdit */ = {
 			isa = PBXGroup;
 			children = (
-				4901FDF72EADF3910004486F /* View6.swift */,
-				4901FDF82EADF3910004486F /* View6ViewModel.swift */,
+				4901FDF72EADF3910004486F /* CalendarEditView.swift */,
+				4901FDF82EADF3910004486F /* CalendarEditViewModel.swift */,
 			);
-			path = View6;
+			path = CalendarEdit;
 			sourceTree = "<group>";
 		};
-		4901FDFC2EADF3910004486F /* View3 */ = {
+		4901FDFC2EADF3910004486F /* ElementInput */ = {
 			isa = PBXGroup;
 			children = (
-				4901FDFA2EADF3910004486F /* View3.swift */,
-				4901FDFB2EADF3910004486F /* View3ViewModel.swift */,
+				4901FDFA2EADF3910004486F /* ElementInputView.swift */,
+				4901FDFB2EADF3910004486F /* ElementInputViewModel.swift */,
 			);
-			path = View3;
+			path = ElementInput;
 			sourceTree = "<group>";
 		};
-		4901FDFF2EADF3910004486F /* View5 */ = {
+		4901FDFF2EADF3910004486F /* GanttChart */ = {
 			isa = PBXGroup;
 			children = (
-				4901FDFD2EADF3910004486F /* View5.swift */,
-				4901FDFE2EADF3910004486F /* View5ViewModel.swift */,
+				4901FDFD2EADF3910004486F /* GanttChartView.swift */,
+				4901FDFE2EADF3910004486F /* GanttChartViewModel.swift */,
 			);
-			path = View5;
+			path = GanttChart;
 			sourceTree = "<group>";
 		};
-		4901FE022EADF3910004486F /* View1 */ = {
+		4901FE022EADF3910004486F /* GoalInput */ = {
 			isa = PBXGroup;
 			children = (
-				4901FE002EADF3910004486F /* View1.swift */,
-				4901FE012EADF3910004486F /* View1ViewModel.swift */,
+				4901FE002EADF3910004486F /* GoalInputView.swift */,
+				4901FE012EADF3910004486F /* GoalInputViewModel.swift */,
 			);
-			path = View1;
+			path = GoalInput;
 			sourceTree = "<group>";
 		};
-		4901FE052EADF3910004486F /* View2 */ = {
+		4901FE052EADF3910004486F /* PeriodSelection */ = {
 			isa = PBXGroup;
 			children = (
-				4901FE032EADF3910004486F /* View2.swift */,
-				4901FE042EADF3910004486F /* View2ViewModel.swift */,
+				4901FE032EADF3910004486F /* PeriodSelectionView.swift */,
+				4901FE042EADF3910004486F /* PeriodSelectionViewModel.swift */,
 			);
-			path = View2;
+			path = PeriodSelection;
 			sourceTree = "<group>";
 		};
 		4901FE062EADF3910004486F /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				4901FE022EADF3910004486F /* View1 */,
-				4901FE052EADF3910004486F /* View2 */,
-				4901FDFC2EADF3910004486F /* View3 */,
-				4901FDF62EADF3910004486F /* View4 */,
-				4901FDFF2EADF3910004486F /* View5 */,
-				4901FDF92EADF3910004486F /* View6 */,
+				4901FDF62EADF3910004486F /* ActionInput */,
+				4901FDF92EADF3910004486F /* CalendarEdit */,
+				4901FDFC2EADF3910004486F /* ElementInput */,
+				4901FDFF2EADF3910004486F /* GanttChart */,
+				4901FE022EADF3910004486F /* GoalInput */,
+				4901FE052EADF3910004486F /* PeriodSelection */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -331,30 +331,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4901FE1C2EADF3910004486F /* View5ViewModel.swift in Sources */,
+				4901FE1C2EADF3910004486F /* GanttChartViewModel.swift in Sources */,
 				4901FE122EADF3910004486F /* GoalUseCase.swift in Sources */,
 				4901FE212EADF3910004486F /* UserDefaultsDataSource.swift in Sources */,
 				4901FE142EADF3910004486F /* DateExtensions.swift in Sources */,
 				4901FE0E2EADF3910004486F /* DayState.swift in Sources */,
 				4901FDDC2EADE7C50004486F /* ContentView.swift in Sources */,
 				4901FE0D2EADF3910004486F /* Action.swift in Sources */,
-				4901FE202EADF3910004486F /* View2ViewModel.swift in Sources */,
+				4901FE202EADF3910004486F /* PeriodSelectionViewModel.swift in Sources */,
 				4901FDDA2EADE7C50004486F /* GrowmapApp.swift in Sources */,
-				4901FE1B2EADF3910004486F /* View5.swift in Sources */,
+				4901FE1B2EADF3910004486F /* GanttChartView.swift in Sources */,
 				4901FE222EADF3910004486F /* GoalRepository.swift in Sources */,
-				4901FE1F2EADF3910004486F /* View2.swift in Sources */,
-				4901FE192EADF3910004486F /* View3.swift in Sources */,
+				4901FE1F2EADF3910004486F /* PeriodSelectionView.swift in Sources */,
+				4901FE192EADF3910004486F /* ElementInputView.swift in Sources */,
 				4901FE112EADF3910004486F /* GoalRepositoryProtocol.swift in Sources */,
 				4901FE102EADF3910004486F /* Goal.swift in Sources */,
-				4901FE182EADF3910004486F /* View6ViewModel.swift in Sources */,
+				4901FE182EADF3910004486F /* CalendarEditViewModel.swift in Sources */,
 				4901FE132EADF3910004486F /* CustomColors.swift in Sources */,
-				4901FE172EADF3910004486F /* View6.swift in Sources */,
-				4901FE1A2EADF3910004486F /* View3ViewModel.swift in Sources */,
-				4901FE152EADF3910004486F /* View4.swift in Sources */,
+				4901FE172EADF3910004486F /* CalendarEditView.swift in Sources */,
+				4901FE1A2EADF3910004486F /* ElementInputViewModel.swift in Sources */,
+				4901FE152EADF3910004486F /* ActionInputView.swift in Sources */,
 				4901FE0F2EADF3910004486F /* Element.swift in Sources */,
-				4901FE1D2EADF3910004486F /* View1.swift in Sources */,
-				4901FE1E2EADF3910004486F /* View1ViewModel.swift in Sources */,
-				4901FE162EADF3910004486F /* View4ViewModel.swift in Sources */,
+				4901FE1D2EADF3910004486F /* GoalInputView.swift in Sources */,
+				4901FE1E2EADF3910004486F /* GoalInputViewModel.swift in Sources */,
+				4901FE162EADF3910004486F /* ActionInputViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

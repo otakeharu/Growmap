@@ -19,6 +19,7 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}
+// Preview is disabled as this view is no longer used
+// #Preview {
+//     ContentView()
+// }

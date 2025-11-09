@@ -11,7 +11,10 @@ import SwiftUI
 struct GrowmapApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            let dataSource = UserDefaultsDataSource()
+            let repository = GoalRepository(dataSource: dataSource)
+            let useCase = GoalUseCase(repository: repository)
+            GoalInputView(viewModel: GoalInputViewModel(useCase: useCase))
         }
     }
 }
