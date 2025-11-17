@@ -22,16 +22,61 @@ struct GanttChartView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            monthHeader
-
-            HStack(spacing: 0) {
-                leftFixedColumn
-                ScrollView([.horizontal, .vertical]) {
+            ZStack(alignment: .topLeading) {
+                // スクロール可能なコンテンツ
+                ScrollView([.horizontal, .vertical], showsIndicators: false) {
                     VStack(spacing: 0) {
-                        dayHeaderRow
-                        ganttGrid
+                        // ヘッダー行（dayHeaderRow）
+                        HStack(spacing: 0) {
+                            // 左上のスペース
+                            Color.clear.frame(width: titleWidth + editWidth, height: rowHeight)
+
+                            // 日付ヘッダー（ScrollViewと一緒に動く）
+                            dayHeaderRow
+                        }
+
+                        // コンテンツ行
+                        HStack(spacing: 0) {
+                            // 左側の列（Title│Edit）
+                            VStack(spacing: 0) {
+                                ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
+                                    HStack(spacing: 0) {
+                                        Text(viewModel.getRowTitle(for: rowIndex))
+                                            .font(.caption)
+                                            .lineLimit(3)
+                                            .minimumScaleFactor(0.7)
+                                            .frame(width: titleWidth, height: rowHeight)
+                                            .background(Color.lightBackground)
+                                            .border(Color.gray.opacity(0.3), width: 0.5)
+
+                                        Button(action: {
+                                            selectedRow = rowIndex
+                                        }) {
+                                            Text("編集")
+                                                .font(.caption)
+                                                .foregroundColor(.primaryBrown)
+                                                .frame(width: editWidth, height: rowHeight)
+                                                .background(Color.lightBackground)
+                                                .border(Color.gray.opacity(0.3), width: 0.5)
+                                        }
+                                    }
+                                }
+                            }
+                            .frame(width: titleWidth + editWidth)
+
+                            // ガントグリッド
+                            ganttGrid
+                        }
                     }
                 }
+
+                // 固定要素（左上の月ヘッダーのみ）
+                Text(viewModel.currentMonth)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(width: titleWidth + editWidth, height: rowHeight)
+                    .background(Color.primaryBrown)
+                    .border(Color.gray.opacity(0.3), width: 0.5)
             }
         }
         .background(Color.appBackground.ignoresSafeArea())
@@ -51,51 +96,6 @@ struct GanttChartView: View {
                     endDate: viewModel.targetDate
                 )
             )
-        }
-    }
-
-    private var monthHeader: some View {
-        HStack {
-            Text(viewModel.currentMonth)
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.primaryBrown)
-        }
-    }
-
-    private var leftFixedColumn: some View {
-        VStack(spacing: 0) {
-            Color.clear.frame(height: rowHeight)
-
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
-                        HStack(spacing: 0) {
-                            Text(viewModel.getRowTitle(for: rowIndex))
-                                .font(.caption)
-                                .lineLimit(3)
-                                .minimumScaleFactor(0.7)
-                                .frame(width: titleWidth, height: rowHeight)
-                                .background(Color.lightBackground)
-                                .border(Color.gray.opacity(0.3), width: 0.5)
-
-                            Button(action: {
-                                selectedRow = rowIndex
-                            }) {
-                                Text("編集")
-                                    .font(.caption)
-                                    .foregroundColor(.primaryBrown)
-                                    .frame(width: editWidth, height: rowHeight)
-                                    .background(Color.lightBackground)
-                                    .border(Color.gray.opacity(0.3), width: 0.5)
-                            }
-                        }
-                    }
-                }
-            }
-            .frame(width: titleWidth + editWidth)
         }
     }
 

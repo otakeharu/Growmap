@@ -25,9 +25,13 @@ class GanttChartViewModel: ObservableObject {
 
     private func loadData() {
         elements = useCase.getElements()
+        print("📊 Elements loaded: \(elements.count)")
 
         if let goal = useCase.getGoal() {
             targetDate = goal.targetDate
+            print("🎯 Target date: \(targetDate)")
+        } else {
+            print("⚠️ No goal found")
         }
 
         let today = calendar.startOfDay(for: Date())
@@ -35,6 +39,9 @@ class GanttChartViewModel: ObservableObject {
 
         days = generateDays(from: today, to: endDate)
         updateCurrentMonth()
+
+        print("📅 Days generated: \(days.count)")
+        print("📊 Row count: \(rowCount)")
     }
 
     private func generateDays(from startDate: Date, to endDate: Date) -> [Date] {
