@@ -10,6 +10,10 @@ import SwiftUI
 struct GanttChartView: View {
     @StateObject private var viewModel: GanttChartViewModel
     @State private var selectedRow: Int?
+    @State private var scrollOffsetX: CGFloat = 0
+    @State private var scrollOffsetY: CGFloat = 0
+    @State private var initialGanttX: CGFloat?
+    @State private var initialGanttY: CGFloat?
 
     private let dayWidth: CGFloat = 44
     private let rowHeight: CGFloat = 44
@@ -20,21 +24,105 @@ struct GanttChartView: View {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
-    var body: some View {
-        VStack(spacing: 0) {
-            monthHeader
+    // 現在一番左に表示されている日付のインデックスを計算
+    private var currentVisibleDayIndex: Int {
+        let offset = -scrollOffsetX
+        let index = Int((offset / dayWidth).rounded())
+        return max(0, min(index, viewModel.days.count - 1))
+    }
 
-            HStack(spacing: 0) {
-                leftFixedColumn
-                ScrollView([.horizontal, .vertical]) {
+    // 現在表示されている年月を取得
+    private var currentDisplayMonth: String {
+        guard currentVisibleDayIndex < viewModel.days.count else {
+            return viewModel.currentMonth
+        }
+        let visibleDate = viewModel.days[currentVisibleDayIndex]
+        return DateFormatter.monthYearFormatter.string(from: visibleDate)
+    }
+
+    var body: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                ZStack(alignment: .topLeading) {
+                    // メインのScrollView（Title│Edit列の幅分右にオフセット）
+                    HStack(spacing: 0) {
+                        Color.clear
+                            .frame(width: titleWidth + editWidth)
+
+                        ScrollView([.horizontal, .vertical], showsIndicators: false) {
+                            VStack(spacing: 0) {
+                                // ヘッダー行のスペース（固定Day Headersの下に隠れる）
+                                Color.clear
+                                    .frame(height: rowHeight)
+
+                                // ガントグリッド（自由にスクロール）
+                                ganttGrid
+                                    .background(
+                                        GeometryReader { geo in
+                                            let frame = geo.frame(in: .named("scroll"))
+                                            Color.clear
+                                                .onChange(of: frame.origin.x) { newX in
+                                                    if let initialX = initialGanttX {
+                                                        scrollOffsetX = newX - initialX
+                                                    }
+                                                }
+                                                .onChange(of: frame.origin.y) { newY in
+                                                    if let initialY = initialGanttY {
+                                                        scrollOffsetY = newY - initialY
+                                                    }
+                                                }
+                                                .onAppear {
+                                                    initialGanttX = frame.origin.x
+                                                    initialGanttY = frame.origin.y
+                                                }
+                                        }
+                                    )
+                            }
+                            .frame(
+                                width: CGFloat(viewModel.days.count) * dayWidth,
+                                height: rowHeight + CGFloat(viewModel.rowCount) * rowHeight
+                            )
+                        }
+                        .coordinateSpace(name: "scroll")
+                    }
+
+                    // 固定要素（ZStackで上に重ねる）
                     VStack(spacing: 0) {
-                        dayHeaderRow
-                        ganttGrid
+                        // 上部行（MonthヘッダーとDayヘッダー）
+                        HStack(spacing: 0) {
+                            // Month Header（左上、完全固定、一番左のDay Headerの年月を表示）
+                            Text(currentDisplayMonth)
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(width: titleWidth + editWidth, height: rowHeight)
+                                .background(Color.primaryBrown)
+                                .border(Color.gray.opacity(0.3), width: 0.5)
+
+                            // Day Headers（上部固定、横スクロールと連動）
+                            ZStack(alignment: .leading) {
+                                Color.primaryBrown
+
+                                dayHeaderRow
+                                    .offset(x: scrollOffsetX)
+                            }
+                            .frame(width: geometry.size.width - (titleWidth + editWidth), height: rowHeight)
+                            .clipped()
+                        }
+
+                        // Title│Edit列（左側固定、縦スクロールと連動）
+                        LeftFixedColumn(
+                            viewModel: viewModel,
+                            scrollOffsetY: scrollOffsetY,
+                            titleWidth: titleWidth,
+                            editWidth: editWidth,
+                            rowHeight: rowHeight,
+                            selectedRow: $selectedRow
+                        )
                     }
                 }
             }
+            .background(Color.appBackground.ignoresSafeArea())
         }
-        .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("ガントチャート")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: Binding(
@@ -51,51 +139,6 @@ struct GanttChartView: View {
                     endDate: viewModel.targetDate
                 )
             )
-        }
-    }
-
-    private var monthHeader: some View {
-        HStack {
-            Text(viewModel.currentMonth)
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.primaryBrown)
-        }
-    }
-
-    private var leftFixedColumn: some View {
-        VStack(spacing: 0) {
-            Color.clear.frame(height: rowHeight)
-
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
-                        HStack(spacing: 0) {
-                            Text(viewModel.getRowTitle(for: rowIndex))
-                                .font(.caption)
-                                .lineLimit(3)
-                                .minimumScaleFactor(0.7)
-                                .frame(width: titleWidth, height: rowHeight)
-                                .background(Color.lightBackground)
-                                .border(Color.gray.opacity(0.3), width: 0.5)
-
-                            Button(action: {
-                                selectedRow = rowIndex
-                            }) {
-                                Text("編集")
-                                    .font(.caption)
-                                    .foregroundColor(.primaryBrown)
-                                    .frame(width: editWidth, height: rowHeight)
-                                    .background(Color.lightBackground)
-                                    .border(Color.gray.opacity(0.3), width: 0.5)
-                            }
-                        }
-                    }
-                }
-            }
-            .frame(width: titleWidth + editWidth)
         }
     }
 
@@ -121,6 +164,7 @@ struct GanttChartView: View {
                 .border(Color.gray.opacity(0.3), width: 0.5)
             }
         }
+        .frame(width: CGFloat(viewModel.days.count) * dayWidth, height: rowHeight)
     }
 
     private var ganttGrid: some View {
@@ -136,6 +180,7 @@ struct GanttChartView: View {
 
                         DayCell(isOn: isOn, isTargetDate: isTarget)
                             .frame(width: dayWidth, height: rowHeight)
+                            .border(Color.gray.opacity(0.3), width: 0.5)
                             .onTapGesture {
                                 viewModel.toggleDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
                             }
@@ -153,7 +198,6 @@ struct DayCell: View {
     var body: some View {
         Rectangle()
             .fill(backgroundColor)
-            .border(Color.gray.opacity(0.3), width: 0.5)
     }
 
     private var backgroundColor: Color {
@@ -168,4 +212,78 @@ struct DayCell: View {
 struct RowSelection: Identifiable {
     let id = UUID()
     let rowIndex: Int
+}
+
+// Title│Edit列（左側固定）
+struct LeftFixedColumn: View {
+    @ObservedObject var viewModel: GanttChartViewModel
+    let scrollOffsetY: CGFloat
+    let titleWidth: CGFloat
+    let editWidth: CGFloat
+    let rowHeight: CGFloat
+    @Binding var selectedRow: Int?
+
+    var body: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                // ヘッダー行のスペース（固定Day Headersの高さ分） - offsetしない
+                Color.clear
+                    .frame(width: titleWidth + editWidth, height: rowHeight)
+
+                // Title│Edit列のセル部分 - offsetを適用
+                ZStack(alignment: .topLeading) {
+                    Color.lightBackground
+
+                    VStack(spacing: 0) {
+                        ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
+                            LeftFixedColumnRow(
+                                rowTitle: viewModel.getRowTitle(for: rowIndex),
+                                rowIndex: rowIndex,
+                                titleWidth: titleWidth,
+                                editWidth: editWidth,
+                                rowHeight: rowHeight,
+                                selectedRow: $selectedRow
+                            )
+                        }
+                    }
+                    .offset(y: scrollOffsetY)
+                }
+                .frame(width: titleWidth + editWidth, height: geometry.size.height - rowHeight)
+                .clipped()
+            }
+        }
+    }
+}
+
+// Title│Edit列の1行
+struct LeftFixedColumnRow: View {
+    let rowTitle: String
+    let rowIndex: Int
+    let titleWidth: CGFloat
+    let editWidth: CGFloat
+    let rowHeight: CGFloat
+    @Binding var selectedRow: Int?
+
+    var body: some View {
+        HStack(spacing: 0) {
+            Text(rowTitle)
+                .font(.caption)
+                .lineLimit(3)
+                .minimumScaleFactor(0.7)
+                .frame(width: titleWidth, height: rowHeight)
+                .background(Color.lightBackground)
+                .border(Color.gray.opacity(0.3), width: 0.5)
+
+            Button(action: {
+                selectedRow = rowIndex
+            }) {
+                Text("編集")
+                    .font(.caption)
+                    .foregroundColor(.primaryBrown)
+                    .frame(width: editWidth, height: rowHeight)
+                    .background(Color.lightBackground)
+                    .border(Color.gray.opacity(0.3), width: 0.5)
+            }
+        }
+    }
 }

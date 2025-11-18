@@ -28,12 +28,18 @@ class GanttChartViewModel: ObservableObject {
 
         if let goal = useCase.getGoal() {
             targetDate = goal.targetDate
+            let startDate = calendar.startOfDay(for: goal.startDate)
+            let endDate = calendar.startOfDay(for: targetDate)
+
+            days = generateDays(from: startDate, to: endDate)
+        } else {
+            // Goalが存在しない場合は今日から表示（後方互換性のため）
+            let today = calendar.startOfDay(for: Date())
+            let endDate = calendar.startOfDay(for: targetDate)
+
+            days = generateDays(from: today, to: endDate)
         }
 
-        let today = calendar.startOfDay(for: Date())
-        let endDate = calendar.startOfDay(for: targetDate)
-
-        days = generateDays(from: today, to: endDate)
         updateCurrentMonth()
     }
 

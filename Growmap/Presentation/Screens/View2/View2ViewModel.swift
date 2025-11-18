@@ -9,24 +9,32 @@ import Foundation
 import Combine
 
 class PeriodSelectionViewModel: ObservableObject {
-    @Published var selectedDate: Date = Date()
+    @Published var startDate: Date = Date()
+    @Published var endDate: Date = Date()
 
     let useCase: GoalUseCase
 
     init(useCase: GoalUseCase) {
         self.useCase = useCase
-        loadTargetDate()
+        loadDates()
     }
 
-    private func loadTargetDate() {
+    private func loadDates() {
         if let goal = useCase.getGoal() {
-            selectedDate = goal.targetDate
+            startDate = goal.startDate
+            endDate = goal.targetDate
         }
     }
 
-    func saveTargetDate() {
+    func saveDates() {
         var goal = useCase.getGoal() ?? Goal()
-        goal.targetDate = selectedDate
+        goal.startDate = startDate
+        goal.targetDate = endDate
         useCase.saveGoal(goal)
+    }
+
+    // 終了日が開始日より前にならないようにバリデーション
+    func validateDates() -> Bool {
+        return endDate >= startDate
     }
 }
