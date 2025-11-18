@@ -107,6 +107,9 @@ struct ActionInputView: View {
         .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("行動入力")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            viewModel.reloadElements()
+        }
         .alert("計画表を作成", isPresented: $showAlert) {
             Button("キャンセル", role: .cancel) { }
             Button("作成する") {

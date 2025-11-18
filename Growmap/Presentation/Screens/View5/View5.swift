@@ -80,45 +80,63 @@ struct GanttChartView: View {
                             }
                             .frame(
                                 width: CGFloat(viewModel.days.count) * dayWidth,
-                                height: rowHeight + CGFloat(viewModel.rowCount) * rowHeight
+                                height: CGFloat(viewModel.rowCount) * rowHeight
                             )
                         }
                         .coordinateSpace(name: "scroll")
                     }
 
                     // 固定要素（ZStackで上に重ねる）
-                    VStack(spacing: 0) {
-                        // 上部行（MonthヘッダーとDayヘッダー）
-                        HStack(spacing: 0) {
-                            // Month Header（左上、完全固定、一番左のDay Headerの年月を表示）
-                            Text(currentDisplayMonth)
-                                .font(.headline)
-                                .foregroundColor(.white)
+                    // Month Header（左上、完全固定）
+                    Text(currentDisplayMonth)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(width: titleWidth + editWidth, height: rowHeight, alignment: .center)
+                        .background(Color.primaryBrown)
+                        .border(Color.gray.opacity(0.3), width: 0.5)
+                        .offset(x: 0, y: 0)
+
+                    // Day Headers（上部固定、横スクロールと連動）
+                    ZStack(alignment: .leading) {
+                        Color.primaryBrown
+
+                        dayHeaderRow
+                            .offset(x: scrollOffsetX)
+                    }
+                    .frame(width: geometry.size.width - (titleWidth + editWidth), height: rowHeight)
+                    .clipped()
+                    .offset(x: titleWidth + editWidth, y: 0)
+
+                    // Title│Edit列（左側固定、縦スクロールと連動）
+                    ZStack(alignment: .topLeading) {
+                        VStack(spacing: 0) {
+                            // ヘッダー行のスペース（固定Day Headersの高さ分）
+                            Color.clear
                                 .frame(width: titleWidth + editWidth, height: rowHeight)
-                                .background(Color.primaryBrown)
-                                .border(Color.gray.opacity(0.3), width: 0.5)
 
-                            // Day Headers（上部固定、横スクロールと連動）
-                            ZStack(alignment: .leading) {
-                                Color.primaryBrown
+                            // Title│Edit列のセル部分
+                            ZStack(alignment: .topLeading) {
+                                Color.lightBackground
 
-                                dayHeaderRow
-                                    .offset(x: scrollOffsetX)
+                                VStack(spacing: 0) {
+                                    ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
+                                        LeftFixedColumnRow(
+                                            rowTitle: viewModel.getRowTitle(for: rowIndex),
+                                            rowIndex: rowIndex,
+                                            titleWidth: titleWidth,
+                                            editWidth: editWidth,
+                                            rowHeight: rowHeight,
+                                            selectedRow: $selectedRow
+                                        )
+                                    }
+                                }
+                                .offset(y: scrollOffsetY)
                             }
-                            .frame(width: geometry.size.width - (titleWidth + editWidth), height: rowHeight)
+                            .frame(width: titleWidth + editWidth, height: geometry.size.height - rowHeight)
                             .clipped()
                         }
-
-                        // Title│Edit列（左側固定、縦スクロールと連動）
-                        LeftFixedColumn(
-                            viewModel: viewModel,
-                            scrollOffsetY: scrollOffsetY,
-                            titleWidth: titleWidth,
-                            editWidth: editWidth,
-                            rowHeight: rowHeight,
-                            selectedRow: $selectedRow
-                        )
                     }
+                    .offset(x: 0, y: 0)
                 }
             }
             .background(Color.appBackground.ignoresSafeArea())
@@ -225,32 +243,25 @@ struct LeftFixedColumn: View {
 
     var body: some View {
         GeometryReader { geometry in
-            VStack(spacing: 0) {
-                // ヘッダー行のスペース（固定Day Headersの高さ分） - offsetしない
-                Color.clear
-                    .frame(width: titleWidth + editWidth, height: rowHeight)
+            ZStack(alignment: .topLeading) {
+                Color.lightBackground
 
-                // Title│Edit列のセル部分 - offsetを適用
-                ZStack(alignment: .topLeading) {
-                    Color.lightBackground
-
-                    VStack(spacing: 0) {
-                        ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
-                            LeftFixedColumnRow(
-                                rowTitle: viewModel.getRowTitle(for: rowIndex),
-                                rowIndex: rowIndex,
-                                titleWidth: titleWidth,
-                                editWidth: editWidth,
-                                rowHeight: rowHeight,
-                                selectedRow: $selectedRow
-                            )
-                        }
+                VStack(spacing: 0) {
+                    ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
+                        LeftFixedColumnRow(
+                            rowTitle: viewModel.getRowTitle(for: rowIndex),
+                            rowIndex: rowIndex,
+                            titleWidth: titleWidth,
+                            editWidth: editWidth,
+                            rowHeight: rowHeight,
+                            selectedRow: $selectedRow
+                        )
                     }
-                    .offset(y: scrollOffsetY)
                 }
-                .frame(width: titleWidth + editWidth, height: geometry.size.height - rowHeight)
-                .clipped()
+                .offset(y: scrollOffsetY)
             }
+            .frame(width: titleWidth + editWidth, height: geometry.size.height)
+            .clipped()
         }
     }
 }

@@ -30,6 +30,10 @@ class ActionInputViewModel: ObservableObject {
         }
     }
 
+    func reloadElements() {
+        loadElements()
+    }
+
     func saveCurrentPage() {
         saveAllActions()
     }

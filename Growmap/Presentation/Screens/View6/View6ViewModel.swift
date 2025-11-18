@@ -16,6 +16,7 @@ class CalendarEditViewModel: ObservableObject {
     let actionIndex: Int
     let startDate: Date
     let endDate: Date
+    var actionTitle: String = ""
 
     private let useCase: GoalUseCase
     private let calendar = Date.jpCalendar
@@ -27,7 +28,16 @@ class CalendarEditViewModel: ObservableObject {
         self.actionIndex = actionIndex
         self.startDate = calendar.startOfDay(for: startDate)
         self.endDate = calendar.startOfDay(for: endDate)
+        loadActionTitle()
         loadSelectedDates()
+    }
+
+    private func loadActionTitle() {
+        let elements = useCase.getElements()
+        guard elementIndex < elements.count else { return }
+        let element = elements[elementIndex]
+        guard actionIndex < element.actions.count else { return }
+        actionTitle = element.actions[actionIndex].text
     }
 
     private func loadSelectedDates() {

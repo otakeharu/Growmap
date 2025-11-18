@@ -31,7 +31,7 @@ struct CalendarEditView: View {
                 .padding()
             }
             .background(Color.lightBackground.ignoresSafeArea())
-            .navigationTitle("カレンダー編集")
+            .navigationTitle(viewModel.actionTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
