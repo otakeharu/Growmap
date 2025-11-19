@@ -103,7 +103,7 @@ struct GanttChartView: View {
                         dayHeaderRow
                             .offset(x: scrollOffsetX)
                     }
-                    .frame(width: geometry.size.width - (titleWidth + editWidth), height: rowHeight)
+                    .frame(width: max(0, geometry.size.width - (titleWidth + editWidth)), height: rowHeight)
                     .clipped()
                     .offset(x: titleWidth + editWidth, y: 0)
 
@@ -132,7 +132,7 @@ struct GanttChartView: View {
                                 }
                                 .offset(y: scrollOffsetY)
                             }
-                            .frame(width: titleWidth + editWidth, height: geometry.size.height - rowHeight)
+                            .frame(width: titleWidth + editWidth, height: max(0, geometry.size.height - rowHeight))
                             .clipped()
                         }
                     }
