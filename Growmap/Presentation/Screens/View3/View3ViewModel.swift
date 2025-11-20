@@ -26,9 +26,18 @@ class ElementInputViewModel: ObservableObject {
     }
 
     func saveElements() {
-        let elementObjects = elements.map { text in
-            Element(text: text, actions: Array(repeating: Action(), count: 4))
+        var savedElements = useCase.getElements()
+
+        // 既存のElementsが8個未満の場合は新規作成
+        while savedElements.count < 8 {
+            savedElements.append(Element(text: "", actions: Array(repeating: Action(), count: 4)))
         }
-        useCase.saveElements(elementObjects)
+
+        // textだけを更新、actionsは保持
+        for (index, text) in elements.enumerated() where index < 8 {
+            savedElements[index].text = text
+        }
+
+        useCase.saveElements(savedElements)
     }
 }

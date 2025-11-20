@@ -14,6 +14,9 @@ struct GanttChartView: View {
     @State private var scrollOffsetY: CGFloat = 0
     @State private var initialGanttX: CGFloat?
     @State private var initialGanttY: CGFloat?
+    @State private var showExportAlert = false
+    @State private var isExporting = false
+    @State private var exportResult: (success: Int, total: Int)?
 
     private let dayWidth: CGFloat = 44
     private let rowHeight: CGFloat = 44
@@ -46,13 +49,13 @@ struct GanttChartView: View {
                 ZStack(alignment: .topLeading) {
                     // メインのScrollView（Title│Edit列の幅分右にオフセット）
                     HStack(spacing: 0) {
-                        Color.clear
+                        Color.appBackground
                             .frame(width: titleWidth + editWidth)
 
                         ScrollView([.horizontal, .vertical], showsIndicators: false) {
                             VStack(spacing: 0) {
                                 // ヘッダー行のスペース（固定Day Headersの下に隠れる）
-                                Color.clear
+                                Color.appBackground
                                     .frame(height: rowHeight)
 
                                 // ガントグリッド（自由にスクロール）
@@ -71,7 +74,7 @@ struct GanttChartView: View {
                                                         scrollOffsetY = newY - initialY
                                                     }
                                                 }
-                                                .onAppear {
+                                                .task {
                                                     initialGanttX = frame.origin.x
                                                     initialGanttY = frame.origin.y
                                                 }
@@ -130,10 +133,46 @@ struct GanttChartView: View {
                     .offset(x: 0, y: rowHeight)
                 }
             }
+            .clipped()
             .background(Color.appBackground.ignoresSafeArea())
         }
         .navigationTitle("ガントチャート")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    showExportAlert = true
+                }) {
+                    Image(systemName: "calendar.badge.plus")
+                        .foregroundColor(.primaryBrown)
+                }
+            }
+        }
+        .alert("リマインダーに追加", isPresented: $showExportAlert) {
+            Button("キャンセル", role: .cancel) { }
+            Button("追加する") {
+                Task {
+                    isExporting = true
+                    let result = await viewModel.exportToReminders()
+                    exportResult = result
+                    isExporting = false
+                }
+            }
+        } message: {
+            Text("ガントチャートでONにした日程をリマインダーに追加します")
+        }
+        .alert("エクスポート完了", isPresented: Binding(
+            get: { exportResult != nil && !isExporting },
+            set: { if !$0 { exportResult = nil } }
+        )) {
+            Button("OK") {
+                exportResult = nil
+            }
+        } message: {
+            if let result = exportResult {
+                Text("\(result.total)件中\(result.success)件のリマインダーを作成しました")
+            }
+        }
         .sheet(item: Binding(
             get: { selectedRow.map { RowSelection(rowIndex: $0) } },
             set: { selectedRow = $0?.rowIndex }

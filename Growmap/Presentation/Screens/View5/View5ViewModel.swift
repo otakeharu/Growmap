@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 class GanttChartViewModel: ObservableObject {
+    private let reminderManager = ReminderManager()
     @Published var days: [Date] = []
     @Published var elements: [Element] = []
     @Published var currentMonth: String = ""
@@ -95,5 +96,11 @@ class GanttChartViewModel: ObservableObject {
 
     func getActionIndex(for rowIndex: Int) -> Int {
         rowIndex % 4
+    }
+
+    // リマインダーにエクスポート
+    func exportToReminders() async -> (success: Int, total: Int) {
+        let reminderData = useCase.getReminderData()
+        return await reminderManager.exportToReminders(reminderData: reminderData)
     }
 }
