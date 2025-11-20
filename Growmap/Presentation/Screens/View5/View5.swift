@@ -80,7 +80,7 @@ struct GanttChartView: View {
                             }
                             .frame(
                                 width: CGFloat(viewModel.days.count) * dayWidth,
-                                height: CGFloat(viewModel.rowCount) * rowHeight
+                                height: rowHeight + CGFloat(viewModel.rowCount) * rowHeight
                             )
                         }
                         .coordinateSpace(name: "scroll")
@@ -109,34 +109,25 @@ struct GanttChartView: View {
 
                     // Title│Edit列（左側固定、縦スクロールと連動）
                     ZStack(alignment: .topLeading) {
+                        Color.lightBackground
+
                         VStack(spacing: 0) {
-                            // ヘッダー行のスペース（固定Day Headersの高さ分）
-                            Color.clear
-                                .frame(width: titleWidth + editWidth, height: rowHeight)
-
-                            // Title│Edit列のセル部分
-                            ZStack(alignment: .topLeading) {
-                                Color.lightBackground
-
-                                VStack(spacing: 0) {
-                                    ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
-                                        LeftFixedColumnRow(
-                                            rowTitle: viewModel.getRowTitle(for: rowIndex),
-                                            rowIndex: rowIndex,
-                                            titleWidth: titleWidth,
-                                            editWidth: editWidth,
-                                            rowHeight: rowHeight,
-                                            selectedRow: $selectedRow
-                                        )
-                                    }
-                                }
-                                .offset(y: scrollOffsetY)
+                            ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
+                                LeftFixedColumnRow(
+                                    rowTitle: viewModel.getRowTitle(for: rowIndex),
+                                    rowIndex: rowIndex,
+                                    titleWidth: titleWidth,
+                                    editWidth: editWidth,
+                                    rowHeight: rowHeight,
+                                    selectedRow: $selectedRow
+                                )
                             }
-                            .frame(width: titleWidth + editWidth, height: max(0, geometry.size.height - rowHeight))
-                            .clipped()
                         }
+                        .offset(y: scrollOffsetY)
                     }
-                    .offset(x: 0, y: 0)
+                    .frame(width: titleWidth + editWidth, height: max(0, geometry.size.height - rowHeight))
+                    .clipped()
+                    .offset(x: 0, y: rowHeight)
                 }
             }
             .background(Color.appBackground.ignoresSafeArea())
@@ -258,7 +249,7 @@ struct LeftFixedColumn: View {
                         )
                     }
                 }
-                .offset(y: scrollOffsetY)
+                //.offset(y: scrollOffsetY)
             }
             .frame(width: titleWidth + editWidth, height: geometry.size.height)
             .clipped()
