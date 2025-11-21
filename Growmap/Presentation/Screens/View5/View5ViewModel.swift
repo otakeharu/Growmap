@@ -87,7 +87,10 @@ class GanttChartViewModel: ObservableObject {
         let element = elements[elementIndex]
         guard actionIndex < element.actions.count else { return "" }
 
-        return element.actions[actionIndex].text
+        let elementName = element.text.isEmpty ? "要素\(elementIndex + 1)" : element.text
+        let actionName = element.actions[actionIndex].text
+
+        return "[\(elementName)] \(actionName)"
     }
 
     func getElementIndex(for rowIndex: Int) -> Int {
