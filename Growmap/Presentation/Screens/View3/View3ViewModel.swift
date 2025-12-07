@@ -25,7 +25,7 @@ class ElementInputViewModel: ObservableObject {
         }
     }
 
-    func saveElements() {
+    func saveElements(updateProgress: Bool = false) {
         var savedElements = useCase.getElements()
 
         // 既存のElementsが8個未満の場合は新規作成
@@ -39,5 +39,10 @@ class ElementInputViewModel: ObservableObject {
         }
 
         useCase.saveElements(savedElements)
+
+        // 「次へ」ボタンを押したときだけ進捗を更新
+        if updateProgress {
+            useCase.updateEditProgress(.elementsEntered)
+        }
     }
 }

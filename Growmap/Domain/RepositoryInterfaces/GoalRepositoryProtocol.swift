@@ -8,6 +8,8 @@
 import Foundation
 
 protocol GoalRepositoryProtocol {
+    func setPlanId(_ planId: String)
+
     func saveGoal(_ goal: Goal)
     func getGoal() -> Goal?
 

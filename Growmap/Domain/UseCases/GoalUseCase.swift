@@ -10,9 +10,19 @@ import EventKit
 
 class GoalUseCase {
     private let repository: GoalRepositoryProtocol
+    private let planUseCase: PlanUseCase?
 
-    init(repository: GoalRepositoryProtocol) {
+    init(repository: GoalRepositoryProtocol, planUseCase: PlanUseCase? = nil) {
         self.repository = repository
+        self.planUseCase = planUseCase
+    }
+
+    func setPlanId(_ planId: String) {
+        repository.setPlanId(planId)
+    }
+
+    func updateEditProgress(_ progress: EditProgress) {
+        planUseCase?.updateEditProgress(progress)
     }
 
     func saveGoal(_ goal: Goal) {

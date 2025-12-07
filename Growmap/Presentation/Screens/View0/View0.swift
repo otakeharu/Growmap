@@ -9,8 +9,12 @@ import SwiftUI
 
 struct PlanListView: View {
     @StateObject private var viewModel: PlanListViewModel
-    @State private var navigateToPlan: Plan?
-    @State private var shouldDismissToRoot = false
+    @State private var selectedPlanId: UUID?
+    @State private var navigateToView1 = false
+    @State private var navigateToView2 = false
+    @State private var navigateToView3 = false
+    @State private var navigateToView4 = false
+    @State private var navigateToView5 = false
 
     init(viewModel: PlanListViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -49,9 +53,19 @@ struct PlanListView: View {
                 Text("計画の名前を入力してください")
             }
             .onReceive(NotificationCenter.default.publisher(for: .navigateToHome)) { _ in
-                navigateToPlan = nil
+                resetNavigation()
             }
         }
+    }
+
+    private func resetNavigation() {
+        navigateToView1 = false
+        navigateToView2 = false
+        navigateToView3 = false
+        navigateToView4 = false
+        navigateToView5 = false
+        selectedPlanId = nil
+        viewModel.loadPlans()
     }
 
     private var emptyStateView: some View {
@@ -78,29 +92,85 @@ struct PlanListView: View {
     }
 
     private var planListView: some View {
-        List {
-            ForEach(viewModel.plans) { plan in
-                NavigationLink(
-                    destination: destinationView(for: plan),
-                    tag: plan,
-                    selection: $navigateToPlan
-                ) {
-                    PlanRow(plan: plan)
+        ZStack {
+            List {
+                ForEach(viewModel.plans) { plan in
+                    Button(action: {
+                        handlePlanSelection(plan)
+                    }) {
+                        PlanRow(plan: plan)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
-                .onTapGesture {
-                    viewModel.selectPlan(plan)
-                    navigateToPlan = plan
-                }
+                .onDelete(perform: viewModel.deletePlan)
             }
-            .onDelete(perform: viewModel.deletePlan)
+
+            // 各画面へのNavigationLink（非表示）
+            if let planId = selectedPlanId, let plan = viewModel.plans.first(where: { $0.id == planId }) {
+                NavigationLink(destination: createView1(for: plan), isActive: $navigateToView1) { EmptyView() }.hidden()
+                NavigationLink(destination: createView2(for: plan), isActive: $navigateToView2) { EmptyView() }.hidden()
+                NavigationLink(destination: createView3(for: plan), isActive: $navigateToView3) { EmptyView() }.hidden()
+                NavigationLink(destination: createView4(for: plan), isActive: $navigateToView4) { EmptyView() }.hidden()
+                NavigationLink(destination: createView5(for: plan), isActive: $navigateToView5) { EmptyView() }.hidden()
+            }
         }
     }
 
-    private func destinationView(for plan: Plan) -> some View {
+    private func handlePlanSelection(_ plan: Plan) {
+        viewModel.selectPlan(plan)
+
+        // まず全てのナビゲーションをリセット
+        navigateToView1 = false
+        navigateToView2 = false
+        navigateToView3 = false
+        navigateToView4 = false
+        navigateToView5 = false
+
+        selectedPlanId = plan.id
+
+        // 進捗に応じて適切な画面に遷移
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            switch plan.editProgress {
+            case .notStarted:
+                self.navigateToView1 = true
+            case .goalEntered:
+                self.navigateToView2 = true
+            case .periodSelected:
+                self.navigateToView3 = true
+            case .elementsEntered:
+                self.navigateToView4 = true
+            case .actionsEntered, .completed:
+                self.navigateToView5 = true
+            }
+        }
+    }
+
+    private func createUseCase(for plan: Plan) -> GoalUseCase {
         let dataSource = UserDefaultsDataSource()
         let repository = GoalRepository(dataSource: dataSource)
-        let useCase = GoalUseCase(repository: repository)
-        return GoalInputView(viewModel: GoalInputViewModel(useCase: useCase))
+        let useCase = GoalUseCase(repository: repository, planUseCase: viewModel.planUseCase)
+        useCase.setPlanId(plan.id.uuidString)
+        return useCase
+    }
+
+    private func createView1(for plan: Plan) -> some View {
+        GoalInputView(viewModel: GoalInputViewModel(useCase: createUseCase(for: plan)))
+    }
+
+    private func createView2(for plan: Plan) -> some View {
+        PeriodSelectionView(viewModel: PeriodSelectionViewModel(useCase: createUseCase(for: plan)))
+    }
+
+    private func createView3(for plan: Plan) -> some View {
+        ElementInputView(viewModel: ElementInputViewModel(useCase: createUseCase(for: plan)))
+    }
+
+    private func createView4(for plan: Plan) -> some View {
+        ActionInputView(viewModel: ActionInputViewModel(useCase: createUseCase(for: plan)))
+    }
+
+    private func createView5(for plan: Plan) -> some View {
+        GanttChartView(viewModel: GanttChartViewModel(useCase: createUseCase(for: plan)))
     }
 }
 

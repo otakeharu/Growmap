@@ -38,7 +38,7 @@ class ActionInputViewModel: ObservableObject {
         saveAllActions()
     }
 
-    func saveAllActions() {
+    func saveAllActions(updateProgress: Bool = false) {
         var elements = useCase.getElements()
         for (elementIndex, _) in elements.enumerated() where elementIndex < 8 {
             for actionIndex in 0..<4 {
@@ -46,6 +46,15 @@ class ActionInputViewModel: ObservableObject {
             }
         }
         useCase.saveElements(elements)
+
+        // 「完了」ボタンを押したときだけ進捗を更新
+        if updateProgress {
+            useCase.updateEditProgress(.actionsEntered)
+        }
+    }
+
+    func completeAndSave() {
+        saveAllActions(updateProgress: true)
     }
 
     func nextPage() {

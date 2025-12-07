@@ -31,6 +31,7 @@ class PeriodSelectionViewModel: ObservableObject {
         goal.startDate = startDate
         goal.targetDate = endDate
         useCase.saveGoal(goal)
+        useCase.updateEditProgress(.periodSelected)
     }
 
     // 終了日が開始日より前にならないようにバリデーション

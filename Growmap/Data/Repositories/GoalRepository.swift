@@ -14,17 +14,23 @@ class GoalRepository: GoalRepositoryProtocol {
         self.dataSource = dataSource
     }
 
+    func setPlanId(_ planId: String) {
+        dataSource.setPlanId(planId)
+    }
+
     func saveGoal(_ goal: Goal) {
         dataSource.saveGoalText(goal.text)
+        dataSource.saveStartDate(goal.startDate)
         dataSource.saveTargetDate(goal.targetDate)
     }
 
     func getGoal() -> Goal? {
-        guard let text = dataSource.getGoalText(),
-              let targetDate = dataSource.getTargetDate() else {
+        guard let text = dataSource.getGoalText() else {
             return nil
         }
-        return Goal(text: text, targetDate: targetDate)
+        let startDate = dataSource.getStartDate() ?? Date()
+        let targetDate = dataSource.getTargetDate() ?? Date()
+        return Goal(text: text, startDate: startDate, targetDate: targetDate)
     }
 
     func saveElements(_ elements: [Element]) {

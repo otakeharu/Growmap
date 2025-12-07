@@ -88,7 +88,7 @@ struct ActionInputView: View {
                     }
 
                     Button(action: {
-                        viewModel.saveAllActions()
+                        viewModel.completeAndSave()
                         showAlert = true
                     }) {
                         Text("完了")

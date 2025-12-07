@@ -13,7 +13,7 @@ class PlanListViewModel: ObservableObject {
     @Published var showNewPlanAlert = false
     @Published var newPlanName = ""
 
-    private let planUseCase: PlanUseCase
+    let planUseCase: PlanUseCase
 
     init(planUseCase: PlanUseCase) {
         self.planUseCase = planUseCase

@@ -27,5 +27,6 @@ class GoalInputViewModel: ObservableObject {
     func saveGoal() {
         let goal = Goal(text: goalText, targetDate: Date())
         useCase.saveGoal(goal)
+        useCase.updateEditProgress(.goalEntered)
     }
 }

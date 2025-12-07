@@ -68,7 +68,7 @@ struct ElementInputView: View {
             }
 
             Button(action: {
-                viewModel.saveElements()
+                viewModel.saveElements(updateProgress: true)
                 navigateToActionInput = true
             }) {
                 Text("次へ")

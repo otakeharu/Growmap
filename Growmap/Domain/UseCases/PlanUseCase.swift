@@ -54,4 +54,14 @@ class PlanUseCase {
         guard let currentId = getCurrentPlanId() else { return nil }
         return getPlans().first { $0.id == currentId }
     }
+
+    func updateEditProgress(_ progress: EditProgress) {
+        guard let currentId = getCurrentPlanId() else { return }
+        var plans = getPlans()
+        if let index = plans.firstIndex(where: { $0.id == currentId }) {
+            plans[index].editProgress = progress
+            plans[index].updatedAt = Date()
+            savePlans(plans)
+        }
+    }
 }
