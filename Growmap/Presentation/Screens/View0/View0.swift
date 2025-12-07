@@ -29,7 +29,8 @@ struct PlanListView: View {
                     planListView
                 }
             }
-            .navigationTitle("計画一覧")
+            .background(Color.appBackground.ignoresSafeArea())
+            .navigationTitle("HOME")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -81,7 +82,7 @@ struct PlanListView: View {
             Button(action: {
                 viewModel.showNewPlanAlert = true
             }) {
-                Text("新しい計画を作成")
+                Text("新しい目標を設定")
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()
@@ -89,6 +90,8 @@ struct PlanListView: View {
                     .cornerRadius(10)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.appBackground)
     }
 
     private var planListView: some View {
@@ -101,9 +104,12 @@ struct PlanListView: View {
                         PlanRow(plan: plan)
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .listRowBackground(Color.appBackground)
                 }
                 .onDelete(perform: viewModel.deletePlan)
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.appBackground)
 
             // 各画面へのNavigationLink（非表示）
             if let planId = selectedPlanId, let plan = viewModel.plans.first(where: { $0.id == planId }) {
