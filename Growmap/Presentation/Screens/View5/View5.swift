@@ -108,6 +108,14 @@ struct GanttChartView: View {
         .navigationTitle("ガントチャート")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    NotificationCenter.default.post(name: .navigateToHome, object: nil)
+                }) {
+                    Image(systemName: "house.fill")
+                        .foregroundColor(.primaryBrown)
+                }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     showExportAlert = true

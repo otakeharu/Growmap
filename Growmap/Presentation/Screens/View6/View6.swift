@@ -34,6 +34,17 @@ struct CalendarEditView: View {
             .navigationTitle(viewModel.actionTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        dismiss()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            NotificationCenter.default.post(name: .navigateToHome, object: nil)
+                        }
+                    }) {
+                        Image(systemName: "house.fill")
+                            .foregroundColor(.primaryBrown)
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("完了") {
                         dismiss()

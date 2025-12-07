@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Action: Identifiable, Codable {
+struct Action: Identifiable, Codable, Hashable {
     let id: UUID
     var text: String
 

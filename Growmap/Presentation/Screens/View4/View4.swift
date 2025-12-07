@@ -107,6 +107,16 @@ struct ActionInputView: View {
         .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("行動入力")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    NotificationCenter.default.post(name: .navigateToHome, object: nil)
+                }) {
+                    Image(systemName: "house.fill")
+                        .foregroundColor(.primaryBrown)
+                }
+            }
+        }
         .onAppear {
             viewModel.reloadElements()
         }

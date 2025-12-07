@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Goal: Identifiable, Codable {
+struct Goal: Identifiable, Codable, Hashable {
     let id: UUID
     var text: String
     var startDate: Date      // 計画開始日

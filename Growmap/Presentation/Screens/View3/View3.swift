@@ -85,6 +85,16 @@ struct ElementInputView: View {
         .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("要素")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    NotificationCenter.default.post(name: .navigateToHome, object: nil)
+                }) {
+                    Image(systemName: "house.fill")
+                        .foregroundColor(.primaryBrown)
+                }
+            }
+        }
         .onAppear {
             if let goal = viewModel.useCase.getGoal() {
                 goalText = goal.text

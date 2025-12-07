@@ -105,5 +105,15 @@ struct PeriodSelectionView: View {
         .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("期間選択")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    NotificationCenter.default.post(name: .navigateToHome, object: nil)
+                }) {
+                    Image(systemName: "house.fill")
+                        .foregroundColor(.primaryBrown)
+                }
+            }
+        }
     }
 }
