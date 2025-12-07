@@ -12,19 +12,25 @@ struct GoalInputView: View {
     @State private var navigateToPeriodSelection = false
     @FocusState private var isTextEditorFocused: Bool
 
+    // 🎨 デザイン調整用の設定（ここを変更すると全体が変わります）
+    private let inputFontSize: CGFloat = 35        // 入力テキストのサイズ（デフォルト: 34 = .largeTitle相当）
+    private let labelTopPadding: CGFloat = 50// ラベルの上余白
+    private let labelBottomPadding: CGFloat = 110
+  // ラベルと入力欄の間隔
+    private let inputAreaHeight: CGFloat = 200     // 入力エリアの高さ
+
     init(viewModel: GoalInputViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 0) {
             // 上部のラベル
             Text("目標を入力してください")
                 .font(.title2)
                 .fontWeight(.medium)
-                .padding(.top, 20)
-
-            Spacer()
+                .padding(.top, labelTopPadding)
+                .padding(.bottom, labelBottomPadding)
 
             // TextEditorとプレースホルダーを重ねる（中央配置）
             ZStack(alignment: .top) {
@@ -32,7 +38,7 @@ struct GoalInputView: View {
                 if viewModel.goalText.isEmpty {
                     Text("目標を入力")
                         .foregroundColor(Color.gray.opacity(0.5))
-                        .font(.largeTitle)
+                        .font(.system(size: inputFontSize))
                         .padding(.top, 8)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
@@ -40,8 +46,8 @@ struct GoalInputView: View {
 
                 // TextEditor（枠線なし、中央揃え）
                 TextEditor(text: $viewModel.goalText)
-                    .frame(height: 200)
-                    .font(.largeTitle)
+                    .frame(height: inputAreaHeight)
+                    .font(.system(size: inputFontSize))
                     .padding(0)
                     .background(Color.clear)
                     .scrollContentBackground(.hidden)
