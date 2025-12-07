@@ -13,34 +13,43 @@ struct ActionInputView: View {
     @State private var showAlert = false
     @State private var isCreatingPlan = false
 
+    // 🎨 デザイン調整用の設定（ここを変更すると全体が変わります）
+    private let elementTitleFontSize: CGFloat = 20    // 要素タイトルのサイズ（デフォルト: 20 = .title2相当）
+    private let elementTitleTopPadding: CGFloat = 20  // 要素タイトルの上余白
+    private let numberLabelFontSize: CGFloat = 17     // 番号ラベルのサイズ（デフォルト: 17 = .headline相当）
+    private let numberLabelWidth: CGFloat = 30        // 番号ラベルの幅
+    private let actionEditorHeight: CGFloat = 60      // 行動入力欄の高さ
+    private let actionSpacing: CGFloat = 16           // 行動入力欄の間隔
+    private let vStackSpacing: CGFloat = 20           // VStackの間隔
+
     init(viewModel: ActionInputViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: vStackSpacing) {
             Text(viewModel.currentElementText)
-                .font(.title2)
+                .font(.system(size: elementTitleFontSize))
                 .fontWeight(.medium)
-                .padding(.top, 20)
+                .padding(.top, elementTitleTopPadding)
                 .padding(.horizontal, 20)
                 .lineLimit(3)
                 .minimumScaleFactor(0.7)
 
             Spacer()
 
-            VStack(spacing: 16) {
+            VStack(spacing: actionSpacing) {
                 ForEach(0..<4, id: \.self) { index in
                     HStack {
                         Text("\(index + 1).")
-                            .font(.headline)
-                            .frame(width: 30)
+                            .font(.system(size: numberLabelFontSize))
+                            .frame(width: numberLabelWidth)
 
                         TextEditor(text: Binding(
                             get: { viewModel.currentActions[index] },
                             set: { viewModel.updateAction(at: index, with: $0) }
                         ))
-                        .frame(height: 60)
+                        .frame(height: actionEditorHeight)
                         .padding(8)
                         .background(Color.white)
                         .cornerRadius(8)
