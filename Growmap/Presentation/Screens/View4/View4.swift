@@ -14,8 +14,8 @@ struct ActionInputView: View {
     @State private var isCreatingPlan = false
 
     // 🎨 デザイン調整用の設定（ここを変更すると全体が変わります）
-    private let elementTitleFontSize: CGFloat = 20    // 要素タイトルのサイズ（デフォルト: 20 = .title2相当）
-    private let elementTitleTopPadding: CGFloat = 20  // 要素タイトルの上余白
+    private let elementTitleFontSize: CGFloat = 25    // 要素タイトルのサイズ（デフォルト: 20 = .title2相当）
+    private let elementTitleTopPadding: CGFloat = 60  // 要素タイトルの上余白
     private let numberLabelFontSize: CGFloat = 17     // 番号ラベルのサイズ（デフォルト: 17 = .headline相当）
     private let numberLabelWidth: CGFloat = 30        // 番号ラベルの幅
     private let actionEditorHeight: CGFloat = 60      // 行動入力欄の高さ
@@ -35,29 +35,38 @@ struct ActionInputView: View {
                 .padding(.horizontal, 20)
                 .lineLimit(3)
                 .minimumScaleFactor(0.7)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
 
             Spacer()
 
             VStack(spacing: actionSpacing) {
                 ForEach(0..<4, id: \.self) { index in
-                    HStack {
-                        Text("\(index + 1).")
-                            .font(.system(size: numberLabelFontSize))
-                            .frame(width: numberLabelWidth)
+                    ZStack(alignment: .topLeading) {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.white)
+
+                        if viewModel.currentActions[index].isEmpty {
+                            Text("要素を入力")
+                                .foregroundColor(Color.gray.opacity(0.5))
+                                .padding(.top, 16)
+                                .padding(.leading, 12)
+                        }
 
                         TextEditor(text: Binding(
                             get: { viewModel.currentActions[index] },
                             set: { viewModel.updateAction(at: index, with: $0) }
                         ))
+                        .scrollContentBackground(.hidden)
+                        .background(Color.clear)
                         .frame(height: actionEditorHeight)
                         .padding(8)
-                        .background(Color.white)
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                        )
                     }
+                    .frame(height: actionEditorHeight)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
                     .padding(.horizontal, 20)
                 }
             }

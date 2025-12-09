@@ -28,5 +28,10 @@ class GoalInputViewModel: ObservableObject {
         let goal = Goal(text: goalText, targetDate: Date())
         useCase.saveGoal(goal)
         useCase.updateEditProgress(.goalEntered)
+
+        // 目標を計画名として更新
+        if let planUseCase = useCase.planUseCase {
+            planUseCase.updateCurrentPlanName(goalText)
+        }
     }
 }

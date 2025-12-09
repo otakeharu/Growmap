@@ -35,23 +35,16 @@ struct PlanListView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        viewModel.showNewPlanAlert = true
+                        let newPlan = viewModel.createNewPlanWithTemporaryName()
+                        selectedPlanId = newPlan.id
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            navigateToView1 = true
+                        }
                     }) {
                         Image(systemName: "plus")
                             .foregroundColor(.primaryBrown)
                     }
                 }
-            }
-            .alert("新しい計画", isPresented: $viewModel.showNewPlanAlert) {
-                TextField("計画名", text: $viewModel.newPlanName)
-                Button("キャンセル", role: .cancel) {
-                    viewModel.newPlanName = ""
-                }
-                Button("作成") {
-                    viewModel.createNewPlan()
-                }
-            } message: {
-                Text("計画の名前を入力してください")
             }
             .onReceive(NotificationCenter.default.publisher(for: .navigateToHome)) { _ in
                 resetNavigation()
@@ -80,7 +73,11 @@ struct PlanListView: View {
                 .foregroundColor(.gray)
 
             Button(action: {
-                viewModel.showNewPlanAlert = true
+                let newPlan = viewModel.createNewPlanWithTemporaryName()
+                selectedPlanId = newPlan.id
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    navigateToView1 = true
+                }
             }) {
                 Text("新しい目標を設定")
                     .font(.headline)

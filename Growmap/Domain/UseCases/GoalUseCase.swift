@@ -10,7 +10,7 @@ import EventKit
 
 class GoalUseCase {
     private let repository: GoalRepositoryProtocol
-    private let planUseCase: PlanUseCase?
+    let planUseCase: PlanUseCase?
 
     init(repository: GoalRepositoryProtocol, planUseCase: PlanUseCase? = nil) {
         self.repository = repository

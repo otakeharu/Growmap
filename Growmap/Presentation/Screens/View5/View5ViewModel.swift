@@ -15,6 +15,7 @@ class GanttChartViewModel: ObservableObject {
     @Published var currentMonth: String = ""
     @Published var targetDate: Date = Date()
     @Published var scrollOffset: CGFloat = 0
+    @Published var goalText: String = ""
 
     let useCase: GoalUseCase
     private let calendar = Date.jpCalendar
@@ -28,6 +29,7 @@ class GanttChartViewModel: ObservableObject {
         elements = useCase.getElements()
 
         if let goal = useCase.getGoal() {
+            goalText = goal.text
             targetDate = goal.targetDate
             let startDate = calendar.startOfDay(for: goal.startDate)
             let endDate = calendar.startOfDay(for: targetDate)
@@ -42,6 +44,10 @@ class GanttChartViewModel: ObservableObject {
         }
 
         updateCurrentMonth()
+    }
+
+    func reloadData() {
+        loadData()
     }
 
     private func generateDays(from startDate: Date, to endDate: Date) -> [Date] {
@@ -75,30 +81,74 @@ class GanttChartViewModel: ObservableObject {
     }
 
     var rowCount: Int {
-        elements.count * 4
+        elements.count * 5  // 要素行 + 4つの行動行
+    }
+
+    func isElementRow(for rowIndex: Int) -> Bool {
+        rowIndex % 5 == 0
     }
 
     func getRowTitle(for rowIndex: Int) -> String {
-        let elementIndex = rowIndex / 4
-        let actionIndex = rowIndex % 4
+        let groupIndex = rowIndex / 5
+        let positionInGroup = rowIndex % 5
 
-        guard elementIndex < elements.count else { return "" }
+        guard groupIndex < elements.count else { return "" }
+        let element = elements[groupIndex]
 
-        let element = elements[elementIndex]
-        guard actionIndex < element.actions.count else { return "" }
-
-        let elementName = element.text.isEmpty ? "要素\(elementIndex + 1)" : element.text
-        let actionName = element.actions[actionIndex].text
-
-        return "[\(elementName)] \(actionName)"
+        if positionInGroup == 0 {
+            // 要素行
+            return element.text.isEmpty ? "要素\(groupIndex + 1)" : element.text
+        } else {
+            // 行動行
+            let actionIndex = positionInGroup - 1
+            guard actionIndex < element.actions.count else { return "" }
+            return element.actions[actionIndex].text
+        }
     }
 
     func getElementIndex(for rowIndex: Int) -> Int {
-        rowIndex / 4
+        rowIndex / 5
     }
 
     func getActionIndex(for rowIndex: Int) -> Int {
-        rowIndex % 4
+        let positionInGroup = rowIndex % 5
+        return positionInGroup - 1
+    }
+
+    // 要素の全ての行動のうち、少なくとも1つがONかチェック
+    func isAnyActionOnForElement(elementIndex: Int, date: Date) -> Bool {
+        guard elementIndex < elements.count else { return false }
+
+        for actionIndex in 0..<4 {
+            if getDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date) {
+                return true
+            }
+        }
+        return false
+    }
+
+    // 要素の全ての行動を一括でトグル
+    func toggleAllActionsForElement(elementIndex: Int, date: Date) {
+        guard elementIndex < elements.count else { return }
+
+        // 現在の状態を確認（少なくとも1つONなら全てOFFに、全てOFFなら全てONに）
+        let isAnyOn = isAnyActionOnForElement(elementIndex: elementIndex, date: date)
+
+        for actionIndex in 0..<4 {
+            let currentState = getDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
+
+            if isAnyOn {
+                // 少なくとも1つONなら全てOFFにする
+                if currentState {
+                    toggleDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
+                }
+            } else {
+                // 全てOFFなら全てONにする
+                if !currentState {
+                    toggleDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
+                }
+            }
+        }
     }
 
     // リマインダーにエクスポート

@@ -62,42 +62,68 @@ struct GanttChartView: View {
 
                     // データ行
                     ForEach(0..<viewModel.rowCount, id: \.self) { rowIndex in
+                        let isElementRow = viewModel.isElementRow(for: rowIndex)
+
                         HStack(spacing: 0) {
                             // タイトル
                             Text(viewModel.getRowTitle(for: rowIndex))
                                 .font(.caption)
+                                .fontWeight(isElementRow ? .bold : .regular)
                                 .lineLimit(3)
                                 .minimumScaleFactor(0.7)
                                 .frame(width: titleWidth, height: rowHeight)
-                                .background(Color.lightBackground)
+                                .background(isElementRow ? Color(red: 211/255, green: 197/255, blue: 178/255) : Color.lightBackground)
                                 .border(Color.gray.opacity(0.3), width: 0.5)
 
-                            // 編集ボタン
-                            Button(action: {
-                                selectedRow = rowIndex
-                            }) {
-                                Text("編集")
-                                    .font(.caption)
-                                    .foregroundColor(.primaryBrown)
+                            if isElementRow {
+                                // 要素行：編集ボタンの代わりに空白
+                                Rectangle()
+                                    .fill(Color(red: 211/255, green: 197/255, blue: 178/255))
                                     .frame(width: editWidth, height: rowHeight)
-                                    .background(Color.lightBackground)
                                     .border(Color.gray.opacity(0.3), width: 0.5)
-                            }
 
-                            // 日付セル
-                            ForEach(viewModel.days.indices, id: \.self) { dayIndex in
-                                let date = viewModel.days[dayIndex]
-                                let elementIndex = viewModel.getElementIndex(for: rowIndex)
-                                let actionIndex = viewModel.getActionIndex(for: rowIndex)
-                                let isOn = viewModel.getDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
-                                let isTarget = viewModel.isTargetDate(date)
+                                // 日付セル（要素行用 - 全行動に反映）
+                                ForEach(viewModel.days.indices, id: \.self) { dayIndex in
+                                    let date = viewModel.days[dayIndex]
+                                    let elementIndex = viewModel.getElementIndex(for: rowIndex)
+                                    let isAnyActionOn = viewModel.isAnyActionOnForElement(elementIndex: elementIndex, date: date)
+                                    let isTarget = viewModel.isTargetDate(date)
 
-                                DayCell(isOn: isOn, isTargetDate: isTarget)
-                                    .frame(width: dayWidth, height: rowHeight)
-                                    .border(Color.gray.opacity(0.3), width: 0.5)
-                                    .onTapGesture {
-                                        viewModel.toggleDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
-                                    }
+                                    DayCell(isOn: isAnyActionOn, isTargetDate: isTarget)
+                                        .frame(width: dayWidth, height: rowHeight)
+                                        .border(Color.gray.opacity(0.3), width: 0.5)
+                                        .onTapGesture {
+                                            viewModel.toggleAllActionsForElement(elementIndex: elementIndex, date: date)
+                                        }
+                                }
+                            } else {
+                                // 行動行：編集ボタン
+                                Button(action: {
+                                    selectedRow = rowIndex
+                                }) {
+                                    Text("編集")
+                                        .font(.caption)
+                                        .foregroundColor(.primaryBrown)
+                                        .frame(width: editWidth, height: rowHeight)
+                                        .background(Color.lightBackground)
+                                        .border(Color.gray.opacity(0.3), width: 0.5)
+                                }
+
+                                // 日付セル
+                                ForEach(viewModel.days.indices, id: \.self) { dayIndex in
+                                    let date = viewModel.days[dayIndex]
+                                    let elementIndex = viewModel.getElementIndex(for: rowIndex)
+                                    let actionIndex = viewModel.getActionIndex(for: rowIndex)
+                                    let isOn = viewModel.getDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
+                                    let isTarget = viewModel.isTargetDate(date)
+
+                                    DayCell(isOn: isOn, isTargetDate: isTarget)
+                                        .frame(width: dayWidth, height: rowHeight)
+                                        .border(Color.gray.opacity(0.3), width: 0.5)
+                                        .onTapGesture {
+                                            viewModel.toggleDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
+                                        }
+                                }
                             }
                         }
                     }
@@ -105,7 +131,7 @@ struct GanttChartView: View {
             }
         }
         .background(Color.appBackground.ignoresSafeArea())
-        .navigationTitle("ガントチャート")
+        .navigationTitle(viewModel.goalText.isEmpty ? "ガントチャート" : viewModel.goalText)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -164,6 +190,9 @@ struct GanttChartView: View {
                     endDate: viewModel.targetDate
                 )
             )
+        }
+        .onAppear {
+            viewModel.reloadData()
         }
     }
 }

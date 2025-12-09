@@ -64,4 +64,14 @@ class PlanUseCase {
             savePlans(plans)
         }
     }
+
+    func updateCurrentPlanName(_ name: String) {
+        guard let currentId = getCurrentPlanId() else { return }
+        var plans = getPlans()
+        if let index = plans.firstIndex(where: { $0.id == currentId }) {
+            plans[index].name = name
+            plans[index].updatedAt = Date()
+            savePlans(plans)
+        }
+    }
 }

@@ -33,6 +33,14 @@ class PlanListViewModel: ObservableObject {
         newPlanName = ""
     }
 
+    func createNewPlanWithTemporaryName() -> Plan {
+        let newPlan = planUseCase.createNewPlan(name: "新しい計画")
+        plans.append(newPlan)
+        planUseCase.savePlans(plans)
+        planUseCase.setCurrentPlanId(newPlan.id)
+        return newPlan
+    }
+
     func deletePlan(at indexSet: IndexSet) {
         indexSet.forEach { index in
             let plan = plans[index]
