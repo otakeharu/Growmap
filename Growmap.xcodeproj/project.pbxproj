@@ -93,7 +93,6 @@
 		4901FDCD2EADE7C50004486F = {
 			isa = PBXGroup;
 			children = (
-				49E165812EE860BB00D32DE7 /* PrivacyInfo.xcprivacy */,
 				4901FDD82EADE7C50004486F /* Growmap */,
 				4901FDD72EADE7C50004486F /* Products */,
 			);
@@ -113,6 +112,7 @@
 				4901FDD92EADE7C50004486F /* GrowmapApp.swift */,
 				4901FDDB2EADE7C50004486F /* ContentView.swift */,
 				4901FE232EADF3A40004486F /* Assets.xcassets */,
+				49E165812EE860BB00D32DE7 /* PrivacyInfo.xcprivacy */,
 				4901FE0C2EADF3910004486F /* Data */,
 				4901FDF02EADF3910004486F /* Domain */,
 				4901FE072EADF3910004486F /* Presentation */,
