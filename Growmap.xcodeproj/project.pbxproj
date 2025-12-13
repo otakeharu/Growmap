@@ -524,7 +524,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Growmap/Preview Content\"";
-				DEVELOPMENT_TEAM = YTV5LKKW5Q;
+				DEVELOPMENT_TEAM = Z55J4LS85W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSRemindersUsageDescription = "行動をリマインダーに追加するために使用します";
@@ -554,7 +554,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Growmap/Preview Content\"";
-				DEVELOPMENT_TEAM = YTV5LKKW5Q;
+				DEVELOPMENT_TEAM = Z55J4LS85W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSRemindersUsageDescription = "行動をリマインダーに追加するために使用します";
