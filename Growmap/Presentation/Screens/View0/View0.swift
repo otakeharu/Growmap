@@ -186,18 +186,9 @@ struct PlanRow: View {
                 .font(.headline)
                 .foregroundColor(.primary)
 
-            HStack {
-                Text(plan.goal.text.isEmpty ? "目標未設定" : plan.goal.text)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .lineLimit(1)
-
-                Spacer()
-
-                Text(DateFormatter.dateFormatter.string(from: plan.goal.targetDate))
-                    .font(.caption)
-                    .foregroundColor(.secondaryBrown)
-            }
+            Text(DateFormatter.dateFormatter.string(from: plan.goal.targetDate))
+                .font(.caption)
+                .foregroundColor(.secondaryBrown)
         }
         .padding(.vertical, 4)
     }
