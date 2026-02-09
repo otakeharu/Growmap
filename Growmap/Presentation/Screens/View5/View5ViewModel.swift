@@ -10,12 +10,16 @@ import Combine
 
 class GanttChartViewModel: ObservableObject {
     private let reminderManager = ReminderManager()
-    @Published var days: [Date] = []
+    @Published var startDate: Date = Date()
+    @Published var endDate: Date = Date()
     @Published var elements: [Element] = []
     @Published var currentMonth: String = ""
-    @Published var targetDate: Date = Date()
     @Published var scrollOffset: CGFloat = 0
     @Published var goalText: String = ""
+
+    var totalDays: Int {
+        calendar.dateComponents([.day], from: startDate, to: endDate).day ?? 0
+    }
 
     let useCase: GoalUseCase
     private let calendar = Date.jpCalendar
@@ -30,17 +34,12 @@ class GanttChartViewModel: ObservableObject {
 
         if let goal = useCase.getGoal() {
             goalText = goal.text
-            targetDate = goal.targetDate
-            let startDate = calendar.startOfDay(for: goal.startDate)
-            let endDate = calendar.startOfDay(for: targetDate)
-
-            days = generateDays(from: startDate, to: endDate)
+            startDate = calendar.startOfDay(for: goal.startDate)
+            endDate = calendar.startOfDay(for: goal.targetDate)
         } else {
             // Goalが存在しない場合は今日から表示（後方互換性のため）
-            let today = calendar.startOfDay(for: Date())
-            let endDate = calendar.startOfDay(for: targetDate)
-
-            days = generateDays(from: today, to: endDate)
+            startDate = calendar.startOfDay(for: Date())
+            endDate = calendar.startOfDay(for: Date())
         }
 
         updateCurrentMonth()
@@ -50,22 +49,13 @@ class GanttChartViewModel: ObservableObject {
         loadData()
     }
 
-    private func generateDays(from startDate: Date, to endDate: Date) -> [Date] {
-        var days: [Date] = []
-        var currentDate = startDate
-
-        while currentDate <= endDate {
-            days.append(currentDate)
-            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate) ?? currentDate
-        }
-
-        return days
+    // インデックスから日付を計算
+    func date(at index: Int) -> Date {
+        calendar.date(byAdding: .day, value: index, to: startDate) ?? startDate
     }
 
     func updateCurrentMonth() {
-        if let firstVisibleDay = days.first {
-            currentMonth = DateFormatter.monthYearFormatter.string(from: firstVisibleDay)
-        }
+        currentMonth = DateFormatter.monthYearFormatter.string(from: startDate)
     }
 
     func toggleDayState(elementIndex: Int, actionIndex: Int, date: Date) {
@@ -77,7 +67,7 @@ class GanttChartViewModel: ObservableObject {
     }
 
     func isTargetDate(_ date: Date) -> Bool {
-        calendar.isDate(date, inSameDayAs: targetDate)
+        calendar.isDate(date, inSameDayAs: endDate)
     }
 
     var rowCount: Int {

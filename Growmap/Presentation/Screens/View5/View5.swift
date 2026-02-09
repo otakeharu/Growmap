@@ -39,24 +39,26 @@ struct GanttChartView: View {
                             .border(Color.gray.opacity(0.3), width: 0.5)
 
                         // 日付ヘッダー
-                        ForEach(viewModel.days.indices, id: \.self) { index in
-                            let date = viewModel.days[index]
-                            let isTarget = viewModel.isTargetDate(date)
+                        LazyHStack(spacing: 0) {
+                            ForEach(0..<viewModel.totalDays, id: \.self) { dayIndex in
+                                let date = viewModel.date(at: dayIndex)
+                                let isTarget = viewModel.isTargetDate(date)
 
-                            VStack(spacing: 2) {
-                                Text(DateFormatter.dayFormatter.string(from: date))
-                                    .font(.caption)
-                                    .fontWeight(isTarget ? .bold : .regular)
-                                    .foregroundColor(.white)
+                                VStack(spacing: 2) {
+                                    Text(DateFormatter.dayFormatter.string(from: date))
+                                        .font(.caption)
+                                        .fontWeight(isTarget ? .bold : .regular)
+                                        .foregroundColor(.white)
 
-                                Text(DateFormatter.weekdaySymbol(for: date))
-                                    .font(.caption2)
-                                    .fontWeight(isTarget ? .bold : .regular)
-                                    .foregroundColor(.white)
+                                    Text(DateFormatter.weekdaySymbol(for: date))
+                                        .font(.caption2)
+                                        .fontWeight(isTarget ? .bold : .regular)
+                                        .foregroundColor(.white)
+                                }
+                                .frame(width: dayWidth, height: rowHeight)
+                                .background(isTarget ? Color.accentCoral : Color.primaryBrown)
+                                .border(Color.gray.opacity(0.3), width: 0.5)
                             }
-                            .frame(width: dayWidth, height: rowHeight)
-                            .background(isTarget ? Color.accentCoral : Color.primaryBrown)
-                            .border(Color.gray.opacity(0.3), width: 0.5)
                         }
                     }
 
@@ -83,19 +85,12 @@ struct GanttChartView: View {
                                     .border(Color.gray.opacity(0.3), width: 0.5)
 
                                 // 日付セル（要素行用 - 全行動に反映）
-                                ForEach(viewModel.days.indices, id: \.self) { dayIndex in
-                                    let date = viewModel.days[dayIndex]
-                                    let elementIndex = viewModel.getElementIndex(for: rowIndex)
-                                    let isAnyActionOn = viewModel.isAnyActionOnForElement(elementIndex: elementIndex, date: date)
-                                    let isTarget = viewModel.isTargetDate(date)
-
-                                    DayCell(isOn: isAnyActionOn, isTargetDate: isTarget)
-                                        .frame(width: dayWidth, height: rowHeight)
-                                        .border(Color.gray.opacity(0.3), width: 0.5)
-                                        .onTapGesture {
-                                            viewModel.toggleAllActionsForElement(elementIndex: elementIndex, date: date)
-                                        }
-                                }
+                                ElementDayCells(
+                                    viewModel: viewModel,
+                                    rowIndex: rowIndex,
+                                    dayWidth: dayWidth,
+                                    rowHeight: rowHeight
+                                )
                             } else {
                                 // 行動行：編集ボタン
                                 Button(action: {
@@ -110,20 +105,12 @@ struct GanttChartView: View {
                                 }
 
                                 // 日付セル
-                                ForEach(viewModel.days.indices, id: \.self) { dayIndex in
-                                    let date = viewModel.days[dayIndex]
-                                    let elementIndex = viewModel.getElementIndex(for: rowIndex)
-                                    let actionIndex = viewModel.getActionIndex(for: rowIndex)
-                                    let isOn = viewModel.getDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
-                                    let isTarget = viewModel.isTargetDate(date)
-
-                                    DayCell(isOn: isOn, isTargetDate: isTarget)
-                                        .frame(width: dayWidth, height: rowHeight)
-                                        .border(Color.gray.opacity(0.3), width: 0.5)
-                                        .onTapGesture {
-                                            viewModel.toggleDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
-                                        }
-                                }
+                                ActionDayCells(
+                                    viewModel: viewModel,
+                                    rowIndex: rowIndex,
+                                    dayWidth: dayWidth,
+                                    rowHeight: rowHeight
+                                )
                             }
                         }
                     }
@@ -186,8 +173,8 @@ struct GanttChartView: View {
                     rowIndex: selection.rowIndex,
                     elementIndex: viewModel.getElementIndex(for: selection.rowIndex),
                     actionIndex: viewModel.getActionIndex(for: selection.rowIndex),
-                    startDate: viewModel.days.first ?? Date(),
-                    endDate: viewModel.targetDate
+                    startDate: viewModel.startDate,
+                    endDate: viewModel.endDate
                 )
             )
         }
@@ -212,6 +199,95 @@ struct DayCell: View {
         } else {
             return isOn ? Color.accentCoral : Color.lightBackground
         }
+    }
+}
+
+// 要素行のセル行を生成
+struct ElementDayCells: View {
+    let viewModel: GanttChartViewModel
+    let rowIndex: Int
+    let dayWidth: CGFloat
+    let rowHeight: CGFloat
+
+    var body: some View {
+        LazyHStack(spacing: 0) {
+            ForEach(0..<viewModel.totalDays, id: \.self) { dayIndex in
+                ElementDayCell(
+                    viewModel: viewModel,
+                    rowIndex: rowIndex,
+                    dayIndex: dayIndex,
+                    dayWidth: dayWidth,
+                    rowHeight: rowHeight
+                )
+            }
+        }
+    }
+}
+
+struct ElementDayCell: View {
+    let viewModel: GanttChartViewModel
+    let rowIndex: Int
+    let dayIndex: Int
+    let dayWidth: CGFloat
+    let rowHeight: CGFloat
+
+    var body: some View {
+        let date = viewModel.date(at: dayIndex)
+        let elementIndex = viewModel.getElementIndex(for: rowIndex)
+        let isAnyActionOn = viewModel.isAnyActionOnForElement(elementIndex: elementIndex, date: date)
+        let isTarget = viewModel.isTargetDate(date)
+
+        DayCell(isOn: isAnyActionOn, isTargetDate: isTarget)
+            .frame(width: dayWidth, height: rowHeight)
+            .border(Color.gray.opacity(0.3), width: 0.5)
+            .onTapGesture {
+                viewModel.toggleAllActionsForElement(elementIndex: elementIndex, date: date)
+            }
+    }
+}
+
+// 行動行のセル行を生成
+struct ActionDayCells: View {
+    let viewModel: GanttChartViewModel
+    let rowIndex: Int
+    let dayWidth: CGFloat
+    let rowHeight: CGFloat
+
+    var body: some View {
+        LazyHStack(spacing: 0) {
+            ForEach(0..<viewModel.totalDays, id: \.self) { dayIndex in
+                ActionDayCell(
+                    viewModel: viewModel,
+                    rowIndex: rowIndex,
+                    dayIndex: dayIndex,
+                    dayWidth: dayWidth,
+                    rowHeight: rowHeight
+                )
+            }
+        }
+    }
+}
+
+struct ActionDayCell: View {
+    let viewModel: GanttChartViewModel
+    let rowIndex: Int
+    let dayIndex: Int
+    let dayWidth: CGFloat
+    let rowHeight: CGFloat
+
+    var body: some View {
+        let date = viewModel.date(at: dayIndex)
+        let elementIndex = viewModel.getElementIndex(for: rowIndex)
+        let actionIndex = viewModel.getActionIndex(for: rowIndex)
+        let isOn = viewModel.getDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
+        let isTarget = viewModel.isTargetDate(date)
+
+        DayCell(isOn: isOn, isTargetDate: isTarget)
+            .frame(width: dayWidth, height: rowHeight)
+            .border(Color.gray.opacity(0.3), width: 0.5)
+            .onTapGesture {
+                viewModel.toggleDayState(elementIndex: elementIndex, actionIndex: actionIndex, date: date)
+            }
     }
 }
 
